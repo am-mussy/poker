@@ -1,0 +1,21 @@
+.user-list-root {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 30px auto 0;
+    width: 300px;
+
+
+    color: #626161;
+    text-align: center;
+    background: var(--main-color);
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    padding: 5px 15px;
+    font-size: 18px;
+    box-shadow: inset -2px -2px 6px var(--room-shadow-color-lightn),
+    inset 2px 2px 6px var(--room-shadow-color-dark)
+}
+
+

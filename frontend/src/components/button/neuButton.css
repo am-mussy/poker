@@ -1,0 +1,31 @@
+/*body {*/
+/*    --main-color: #252731;*/
+
+/*    !*room color*!*/
+/*    --room-shadow-color-dark: rgba(0, 0, 0, 0.5);*/
+/*    --room-shadow-color-lightn: rgba(255, 255, 255, 0.05);*/
+
+
+
+/*    !*text color*!*/
+/*    --text-color: #626161*/
+/*}*/
+
+
+.btn {
+    border: none;
+    border-radius: 40px;
+    text-transform: uppercase;
+    color: var(--text-color);
+    background: var(--main-color);
+    box-shadow: -2px -2px 6px var(--room-shadow-color-lightn),
+    2px 2px 6px var(--room-shadow-color-dark);
+
+}
+.btn:active {
+    color: #626161;
+    border-radius: 40px;
+
+    box-shadow: inset -2px -2px 6px var(--room-shadow-color-lightn),
+    inset 2px 2px 6px var(--room-shadow-color-dark);
+}

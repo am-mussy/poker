@@ -1,0 +1,13 @@
+.card-root:hover {
+   cursor: pointer;
+}
+
+.scrum-btn {
+   display: flex;
+   align-content: space-between;
+   width: 30px;
+}
+
+.scrumVote-wrapper {
+   margin: 50px 0 30px auto ;
+}

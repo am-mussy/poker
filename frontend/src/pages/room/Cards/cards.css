@@ -1,0 +1,8 @@
+.cards-root {
+    display: flex;
+    flex-direction: row;
+}
+
+.vote-btn {
+    width: 30px;
+}
