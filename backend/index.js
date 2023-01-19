@@ -109,5 +109,5 @@ const init = async () => {
 
 server.listen(4000, () => {
   init();
-  console.log("listening on *:8080");
+  console.log("listening on *:4000");
 });
