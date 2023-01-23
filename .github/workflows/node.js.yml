@@ -10,7 +10,7 @@ jobs:
   remove:
     runs-on: self-hosted
     steps:
-      - run: rm -r /var/www/PokerApp/_work/poker
+      - run: sudo rm -r /var/www/PokerApp/_work/poker
 
   backend_install:
     runs-on: self-hosted
@@ -61,4 +61,5 @@ jobs:
             node-version: 18
         - run: |
             cd /var/www/PokerApp/_work/poker/poker/backend/
+            pm2 stop PokerApp
             pm2 index.js --name "PokerApp"
