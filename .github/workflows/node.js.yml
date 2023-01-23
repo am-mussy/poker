@@ -26,18 +26,12 @@ jobs:
   build:
     needs: npm_istall
     runs-on: self-hosted
-    strategy:
-      matrix:
-        node-version: [18.x]
     steps:
       - name: Run Build
         run: cd /var/www/PokerApp/_work/poker/poker/frontend && npm run build
   start:
     needs: build
     runs-on: self-hosted
-    strategy:
-      matrix:
-        node-version: [ 18.x ]
     steps:
       - name: start
         run: |
@@ -46,4 +40,3 @@ jobs:
         pm2 start index.js --name "PokerApp"
         pm2 save
         sudo systemctl restart nginx
-
