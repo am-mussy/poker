@@ -30,36 +30,18 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
       - name: Run Build
         run: cd /var/www/PokerApp/_work/poker/poker/frontend && npm run build
+  start:
+    needs: build
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+    steps:
+      - name: start
+        run: |
+        cd /var/www/PokerApp/_work/poker/poker/backend
+        pm2 stop "PokerApp"
+        pm2 start index.js --name "PokerApp"
 
-#name: Node.js CI
-#
-#on:
-#  push:
-#    branches: [master]
-#  pull_request:
-#    branches: [master]
-#
-#jobs:
-#  npm_install:
-#    runs-on: self-hosted
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Use Node.js
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: 18
-#      - run: |
-#          cd /var/www/PokerApp/_work/poker/poker/backend
-#          npm install
-#      - name:
-#          cd /var/www/PokerApp/_work/poker/poker/frontend
-#          npm install
-#          npm run build
