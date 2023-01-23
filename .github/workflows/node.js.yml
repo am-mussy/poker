@@ -17,8 +17,8 @@ jobs:
         with:
           node-version: ${{matrix.node-version}}
       - run: |
-          cd ./backend
+          cd /var/www/PokerApp/_work/poker/poker/backend
           npm i
-          cd ../fronend
+          cd /var/www/PokerApp/_work/poker/poker/fronend/
           npm i
           npm run build
