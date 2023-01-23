@@ -18,7 +18,7 @@ const router = express.Router();
 const adapter = new JSONFile("db.json");
 const db = new Low(adapter);
 
-app.use(express.static(path.join(__dirname, '/frontend/build')));
+app.use(express.static(path.join('../frontend/build')));
 router.get("/", (req, res) => {
   res.send("server is up and running");
 });

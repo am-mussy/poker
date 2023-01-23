@@ -25,7 +25,7 @@ jobs:
     runs-on: self-hosted
     needs: backend_install
     steps:
-      - name: Use Node.js ${{matrix.version}}
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -38,10 +38,23 @@ jobs:
       needs: frontend_install
       
       steps:
-        - name: Use Node.js ${{matrix.version}}
+        - name: Use Node.js
           uses: actions/setup-node@v3
           with:
             node-version: 18
         - run: |
             cd /var/www/PokerApp/_work/poker/poker/frontend/
             sudo npm run build
+  start:
+    runs-on: self-hosted
+    needs: frontend_install
+
+    steps:
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: |
+          pm2
+          cd /var/www/PokerApp/_work/poker/poker/frontend/
+          sudo npm run build
