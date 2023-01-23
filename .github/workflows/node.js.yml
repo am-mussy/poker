@@ -7,10 +7,8 @@ on:
     branches: [master]
 
 jobs:
-
   npm_install:
     runs-on: self-hosted
-    needs: remove
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 
