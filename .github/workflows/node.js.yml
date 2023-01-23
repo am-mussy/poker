@@ -37,7 +37,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Run Build
-          run: cd /var/www/PokerApp/_work/poker/poker/frontend && npm run build
+        run: cd /var/www/PokerApp/_work/poker/poker/frontend && npm run build
 
 #name: Node.js CI
 #
