@@ -9,7 +9,6 @@ on:
 jobs:
   backend_install:
     runs-on: self-hosted
-
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{matrix.node-version}}
@@ -19,31 +18,27 @@ jobs:
       - run: |
           cd /var/www/PokerApp/_work/poker/poker/backend
           npm i
-          
-
-  frontend_install:
-    runs-on: self-hosted
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{matrix.node-version}}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{matrix.node-version}}
-      - run: |
-          
-          cd /var/www/PokerApp/_work/poker/poker/frontend/
-          npm i
-          npm run build
-  build:
-      runs-on: self-hosted
-      needs: frontend_install
-      steps:
-        - uses: actions/checkout@v3
-        - name: Use Node.js ${{matrix.node-version}}
-          uses: actions/setup-node@v1
-          with:
-            node-version: ${{matrix.node-version}}
-        - run: |
-            cd /var/www/PokerApp/_work/poker/poker/frontend/
-            npm run build
+#  frontend_install:
+#    runs-on: self-hosted
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Use Node.js ${{matrix.node-version}}
+#        uses: actions/setup-node@v1
+#        with:
+#          node-version: ${{matrix.node-version}}
+#      - run: |
+#          cd /var/www/PokerApp/_work/poker/poker/frontend/
+#          npm i
+#          npm run build
+#  build:
+#      runs-on: self-hosted
+#      needs: frontend_install
+#      steps:
+#        - uses: actions/checkout@v3
+#        - name: Use Node.js ${{matrix.node-version}}
+#          uses: actions/setup-node@v1
+#          with:
+#            node-version: ${{matrix.node-version}}
+#        - run: |
+#            cd /var/www/PokerApp/_work/poker/poker/frontend/
+#            npm run build
