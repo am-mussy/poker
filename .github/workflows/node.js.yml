@@ -23,8 +23,6 @@ jobs:
         run: cd /var/www/PokerApp/_work/poker/poker/backend && npm install
       - name: Install dependencies frontend
         run: cd /var/www/PokerApp/_work/poker/poker/frontend && npm install
-
-
   build:
     needs: npm_istall
     runs-on: self-hosted
