@@ -37,7 +37,7 @@ jobs:
           npm run build
   build:
       runs-on: self-hosted
-
+      needs: frontend_install
       steps:
         - uses: actions/checkout@v3
         - name: Use Node.js ${{matrix.node-version}}
