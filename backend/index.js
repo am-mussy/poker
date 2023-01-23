@@ -1,3 +1,4 @@
+import * as path from "path";
 import express from "express";
 import { Low } from "lowdb";
 import { JSONFile } from "lowdb/node";
@@ -17,6 +18,7 @@ const router = express.Router();
 const adapter = new JSONFile("db.json");
 const db = new Low(adapter);
 
+app.use(express.static(path.join(__dirname, '/frontend/build')));
 router.get("/", (req, res) => {
   res.send("server is up and running");
 });
