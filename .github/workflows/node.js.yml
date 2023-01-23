@@ -7,9 +7,14 @@ on:
     branches: [master]
 
 jobs:
+  remove:
+    runs-on: self-hosted
+    steps:
+      - run: rm -r /var/www/PokerApp/_work/poker
+
   backend_install:
     runs-on: self-hosted
-  
+    needs: remove
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 
