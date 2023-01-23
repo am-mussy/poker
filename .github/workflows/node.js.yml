@@ -19,6 +19,6 @@ jobs:
       - run: |
           cd /var/www/PokerApp/_work/poker/poker/backend
           npm i
-          cd /var/www/PokerApp/_work/poker/poker/fronend/
+          cd /var/www/PokerApp/_work/poker/poker/frontend/
           npm i
           npm run build
