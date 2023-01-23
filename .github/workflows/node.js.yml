@@ -20,21 +20,4 @@ jobs:
           npm install
           cd /var/www/PokerApp/_work/poker/poker/frontend
           npm install
-      - name: Build
-      - run: |
-          cd /var/www/PokerApp/_work/poker/poker/frontend
           npm run build
-
-# start:
-#      runs-on: self-hosted
-#      needs: build
-#
-#      steps:
-#        - name: Use Node.js
-#          uses: actions/setup-node@v3
-#          with:
-#            node-version: 18
-#        - run: |
-#            cd /var/www/PokerApp/_work/poker/poker/backend/
-#            pm2 stop PokerApp
-#            pm2 index.js --name "PokerApp"
