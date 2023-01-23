@@ -44,4 +44,4 @@ jobs:
             node-version: 18
         - run: |
             cd /var/www/PokerApp/_work/poker/poker/frontend/
-            npm run build
+            sudo npm run build
