@@ -7,12 +7,8 @@ on:
     branches: [master]
 
 jobs:
-  remove:
-    runs-on: self-hosted
-    steps:
-      - run: sudo rm -r /var/www/PokerApp/_work/poker
 
-  backend_install:
+  npm_install:
     runs-on: self-hosted
     needs: remove
     steps:
@@ -24,42 +20,32 @@ jobs:
       - run: |
           cd /var/www/PokerApp/_work/poker/poker/backend
           npm install
-          
-
-  frontend_install:
-    runs-on: self-hosted
-    needs: backend_install
-    steps:
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - run: |
-          
           cd /var/www/PokerApp/_work/poker/poker/frontend/
-          npm i
+          npm install
   build:
       runs-on: self-hosted
-      needs: frontend_install
-      
+      needs: npm_install
       steps:
+        - name: Get repository code
+          uses: actions/checkout@v3
         - name: Use Node.js
-          uses: actions/setup-node@v3
-          with:
-            node-version: 18
+            uses: actions/setup-node@v3
+            with:
+              node-version: 18
         - run: |
             cd /var/www/PokerApp/_work/poker/poker/frontend/
-            sudo npm run build
-  start:
-      runs-on: self-hosted
-      needs: build
+            npm run build
 
-      steps:
-        - name: Use Node.js
-          uses: actions/setup-node@v3
-          with:
-            node-version: 18
-        - run: |
-            cd /var/www/PokerApp/_work/poker/poker/backend/
-            pm2 stop PokerApp
-            pm2 index.js --name "PokerApp"
+# start:
+#      runs-on: self-hosted
+#      needs: build
+#
+#      steps:
+#        - name: Use Node.js
+#          uses: actions/setup-node@v3
+#          with:
+#            node-version: 18
+#        - run: |
+#            cd /var/www/PokerApp/_work/poker/poker/backend/
+#            pm2 stop PokerApp
+#            pm2 index.js --name "PokerApp"
