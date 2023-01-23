@@ -20,13 +20,10 @@ jobs:
           npm install
           cd /var/www/PokerApp/_work/poker/poker/frontend
           npm install
-  build:
-      runs-on: self-hosted
-      needs: npm_install
-      steps:
-        - run: |
-            cd /var/www/PokerApp/_work/poker/poker/frontend
-            npm run build
+      - name: Build
+      - run: |
+          cd /var/www/PokerApp/_work/poker/poker/frontend
+          npm run build
 
 # start:
 #      runs-on: self-hosted
