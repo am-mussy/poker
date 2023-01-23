@@ -14,14 +14,10 @@ import {
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-const router = express.Router();
 const adapter = new JSONFile("db.json");
 const db = new Low(adapter);
 
 app.use(express.static(path.join('../frontend/build')));
-router.get("/", (req, res) => {
-  res.send("server is up and running");
-});
 
 const updateUsersList = (socket) => {
   socket.on(UPDATE_USERS, async (roomId) => {
