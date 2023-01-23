@@ -42,9 +42,7 @@ const joinToRoom = (socket) => {
   socket.on(JOIN_TO_ROOM, async (data) => {
     console.log(data);
     const { roomId, host } = data;
-
     socket.join(roomId);
-
     if (host) {
       if (!db.data.rooms[`${roomId}`]) {
         db.data.rooms[`${roomId}`] = { scramPointIsHidden: true };
