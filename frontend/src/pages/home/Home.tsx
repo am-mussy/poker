@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import "./home.css";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
@@ -50,13 +50,20 @@ function Home() {
     }
   };
 
+  const changeName = (e : ChangeEvent<HTMLInputElement>) =>{
+    console.log(name.length)
+    setName(e.target.value.slice(0, 15))
+  }
+
   return (
     <div className={"main"}>
       <div className={"room"}>
         <input
           className={inputNameValidation()}
           placeholder={"NAME"}
-          onChange={(e) => setName(e.target.value)}
+          value={name}
+          // onChange={(e) => setName(e.target.value)}
+          onChange={(e)=>changeName(e)}
           onClick={() => setActiveConnect(false)}
         />
         <button type="submit" onClick={createHostingRoom}>
