@@ -62,7 +62,6 @@ function Home() {
           className={inputNameValidation()}
           placeholder={"NAME"}
           value={name}
-          // onChange={(e) => setName(e.target.value)}
           onChange={(e)=>changeName(e)}
           onClick={() => setActiveConnect(false)}
         />
