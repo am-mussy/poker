@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import "./home.css";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
@@ -7,7 +7,7 @@ import { createRoomId } from "../../helpers/random";
 
 function Home() {
   const [name, setName] = useState("");
-  const [roomId, setRoomId] = useState(0);
+  const [roomId, setRoomId] = useState("");
   const [activeCreateRoom, setActiveCreateRoom] = useState(false);
   const [activeConnect, setActiveConnect] = useState(false);
 
@@ -25,7 +25,10 @@ function Home() {
   const connectToHostingRoom = () => {
     setActiveConnect(true);
     setActiveCreateRoom(true);
-    name && roomId && dispatch(connect({ name: name, roomId: roomId }));
+    const value:number = parseInt(roomId)
+
+
+    name && roomId && dispatch(connect({ name: name, roomId: value }));
   };
 
   useEffect(() => {
@@ -50,6 +53,10 @@ function Home() {
     }
   };
 
+  const onChangeRoomId = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace (/\D/, '')
+    setRoomId(value)
+  }
   return (
     <div className={"main"}>
       <div className={"room"}>
@@ -65,9 +72,10 @@ function Home() {
         <div className={"connect"}>
           <input
             className={inputRoomIdValidation()}
+            value={roomId}
             type="text"
             placeholder={"ROOM ID"}
-            onChange={(e) => setRoomId(parseInt(e.target.value))}
+            onChange={(e) => onChangeRoomId(e)}
           />
           <button type="submit" onClick={connectToHostingRoom}>
             connect
