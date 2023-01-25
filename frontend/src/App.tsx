@@ -17,6 +17,7 @@ function App() {
 
   const dispatch = useAppDispatch();
   socket.on(UPDATE_USERS, (users: IUser[]) => {
+    console.log(users)
     dispatch(initialize(users));
   });
 

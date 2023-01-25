@@ -8,7 +8,7 @@ import {
   UPDATE_USERS,
   JOIN_TO_ROOM,
   SET_SCRAM_POINT,
-  CHANGE_SCRAM_POINT_VISIBILITY,
+  CHANGE_SCRAM_POINT_VISIBILITY, CLEAR_VOTES_VALUE,
 } from "./actions.js";
 
 const app = express();
@@ -18,6 +18,17 @@ const adapter = new JSONFile("db.json");
 const db = new Low(adapter);
 
 app.use(express.static(path.join('../frontend/build')));
+
+const clearVotesValue = (socket) =>{
+  socket.on(CLEAR_VOTES_VALUE, async ({roomId}) => {
+    if (db.data.rooms[roomId]) {
+      db.data.rooms[roomId].users = db.data.rooms[roomId].users.map((user)=> ({...user, scrum:0}))
+      console.log(db.data.rooms[roomId].users)
+      io.to(roomId).emit(UPDATE_USERS, db.data.rooms[`${roomId}`].users);
+      await adapter.write(db.data);
+    }
+  });
+}
 
 const updateUsersList = (socket) => {
   socket.on(UPDATE_USERS, async (roomId) => {
@@ -29,7 +40,7 @@ const updateUsersList = (socket) => {
       });
       db.data.rooms[roomId].users = roomUsers;
 
-      io.to(roomId).emit(UPDATE_USERS, db.data.rooms[roomId].users);
+      io.to(roomId).emit(UPDATE_USERS, db.data.rooms[`${roomId}`].users);
     }
   });
 };
@@ -39,6 +50,7 @@ const joinToRoom = (socket) => {
     console.log(data);
     const { roomId, host } = data;
     socket.join(roomId);
+
     if (host) {
       if (!db.data.rooms[`${roomId}`]) {
         db.data.rooms[`${roomId}`] = { scramPointIsHidden: true };
@@ -61,12 +73,12 @@ const joinToRoom = (socket) => {
 };
 
 const setScramPoint = (socket) => {
-  socket.on(SET_SCRAM_POINT, async ({ roomId, userId, scramPoint }) => {
+  socket.on(SET_SCRAM_POINT, async ({ roomId, userId, scrumPoint }) => {
     db.data.rooms[`${roomId}`].users = db.data.rooms[`${roomId}`].users.map(
       (user) => {
         if (user.userId === userId) {
           // roomId = user.roomId;
-          return { ...user, scram: scramPoint };
+          return { ...user, scrum: scrumPoint };
         } else {
           return user;
         }
@@ -94,7 +106,10 @@ io.on("connection", async (socket) => {
   updateUsersList(socket);
   setScramPoint(socket);
   changeScramPointVisibility(socket);
+  clearVotesValue(socket);
 });
+
+
 
 const init = async () => {
   await db.read();

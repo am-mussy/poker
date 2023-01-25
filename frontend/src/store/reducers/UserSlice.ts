@@ -11,7 +11,7 @@ import { createUserId } from "../../helpers/random";
 const initialState: IUser = {
   name: "",
   roomId: 0,
-  scram: 0,
+  scrum: 0,
   host: false,
   userId: null,
 };
@@ -32,11 +32,11 @@ export const userSlice = createSlice({
     },
 
     setScramPoint(state, action: PayloadAction<number>) {
-      state.scram = action.payload;
+      state.scrum = action.payload;
       socket.emit(SET_SCRAM_POINT, {
         roomId: state.roomId,
         userId: state.userId,
-        scramPoint: state.scram,
+        scrumPoint: state.scrum,
       });
     },
 

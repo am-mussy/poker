@@ -10,9 +10,11 @@ type UserListProps = {
 const UserList = ({ users }: UserListProps) => {
   return (
     <div className={"user-list-root"}>
-      {users.map(({ name, scram }, index) => (
-        <UserLine key={`${index}_key`} name={name ?? "NO NAME"} scram={scram} />
-      ))}
+      {users.map((user:IUser, index:number) => {
+        return (
+            <UserLine key={`${index}_key`} name={user.name ?? "NO NAME"} scrum={user.scrum} />
+        )
+      })}
     </div>
   );
 };

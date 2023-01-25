@@ -2,7 +2,7 @@ export interface IUser {
   name: string | null;
   host?: boolean;
   roomId: number | null;
-  scram?: number;
+  scrum?: number;
   userId?: number | null;
 }
 

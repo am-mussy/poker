@@ -2,7 +2,12 @@ import React from 'react';
 import './userLine.css'
 import {useAppSelector} from "../../../../hooks/hooks";
 
-function UserLine ({name, scram}:{name: string, scram?:number}) {
+type UserLineProps = {
+    name: string,
+    scrum?: number
+}
+
+function UserLine ({name, scrum}:UserLineProps) {
 
     const isHidden = useAppSelector(state => state.roomReducer.scramPointIsHidden)
     const scoreStyle = isHidden ? 'score-blur' : '';
@@ -10,7 +15,7 @@ function UserLine ({name, scram}:{name: string, scram?:number}) {
     return (
         <div className={'user-line-root'}>
             <div>{name}</div>
-            <div className={scoreStyle}>{scram}</div>
+            <div className={scoreStyle}>{scrum}</div>
         </div>
     )
 }

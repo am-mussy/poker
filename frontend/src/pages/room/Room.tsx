@@ -15,7 +15,7 @@ function Room() {
     (state) => state.roomReducer.scramPointIsHidden
   );
   const dispatch = useAppDispatch();
-  const { changeScramPointVisibility } = roomSlice.actions;
+  const { changeScramPointVisibility, clearVotesValueAction } = roomSlice.actions;
 
   useEffect(() => {
     if (!userData.roomId) {
@@ -25,6 +25,7 @@ function Room() {
 
   const changeVisibility = () =>
     dispatch(changeScramPointVisibility(!isHidden));
+  const clearVotesValue = () => dispatch(clearVotesValueAction())
   return (
     <div className="Room">
       <div className={"roomId"}>ROOM ID:{userData.roomId}</div>
@@ -33,6 +34,12 @@ function Room() {
         className={"show-btn"}
         onClick={changeVisibility}
         name={`${isHidden ? "Показать" : "Скрыть"}`}
+      />
+
+      <NeuButton
+        className={"show-btn"}
+        onClick={clearVotesValue}
+        name={`${"Очистить"}`}
       />
       <UserList users={userList} />
     </div>
