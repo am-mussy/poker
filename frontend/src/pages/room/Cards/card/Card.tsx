@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import "./card.css";
 import { useAppDispatch } from "../../../../hooks/hooks";
 import { userSlice } from "../../../../store/reducers/UserSlice";
-import NeuButton from "../../../../components/button/NeuButton";
+import NeuButton from "../../../../shared/button/NeuButton";
 
 interface CardProps {
   fibNumber: number;

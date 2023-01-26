@@ -1,6 +1,10 @@
 import { IRoom, IUser } from "../../types/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {CHANGE_SCRAM_POINT_VISIBILITY, CLEAR_VOTES_VALUE, socket} from "../../API/socket";
+import {
+  CHANGE_SCRAM_POINT_VISIBILITY,
+  CLEAR_VOTES_VALUE,
+  socket,
+} from "../../API/socket";
 
 const initialState: IRoom = {
   roomId: 0,
@@ -12,7 +16,6 @@ export const roomSlice = createSlice({
   initialState,
   reducers: {
     initialize(state, action: PayloadAction<IUser[]>) {
-      console.log("initialize", action.payload);
       state.users = action.payload;
       state.roomId =
         action.payload[0].roomId === null ? 0 : action.payload[0].roomId;
@@ -25,11 +28,11 @@ export const roomSlice = createSlice({
         isVisible: state.scramPointIsHidden,
       });
     },
-    clearVotesValueAction(state){
+    clearVotesValueAction(state) {
       socket.emit(CLEAR_VOTES_VALUE, {
         roomId: state.roomId,
       });
-    }
+    },
   },
 });
 

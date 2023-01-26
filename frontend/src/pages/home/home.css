@@ -1,12 +1,8 @@
 body {
     --main-color: #252731;
-
     /*room color*/
     --room-shadow-color-dark: rgba(0, 0, 0, 0.5);
     --room-shadow-color-lightn: rgba(255, 255, 255, 0.05);
-
-
-
     /*text color*/
     --text-color: #626161
 }
@@ -29,12 +25,8 @@ body {
     width: 200px;
     padding: 50px;
     gap: 30px;
-
-
     background-color:#262A35;
-
     border-radius: 20px;
-
 }
 
 .room .connect {

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from "./App";
+import Index from "./app/index";
 import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import {setupStore} from "./store/store";
@@ -17,7 +17,7 @@ const store = setupStore()
 root.render(
     <BrowserRouter>
         <Provider store={store}>
-            <App/>
+            <Index/>
         </Provider>
     </BrowserRouter>
 );

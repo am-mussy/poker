@@ -1,23 +1,22 @@
 import React from "react";
-import "./App.css";
+import "./index.css";
 import { Route, Routes } from "react-router-dom";
-import Room from "./pages/room/Room";
-import Home from "./pages/home/Home";
-import { roomSlice } from "./store/reducers/RoomSlice";
-import { useAppDispatch } from "./hooks/hooks";
+import Room from "../pages/room/Room";
+import Home from "../pages/home/Home";
+import { roomSlice } from "../store/reducers/RoomSlice";
+import { useAppDispatch } from "../hooks/hooks";
 import {
   UPDATE_USERS,
   socket,
   CHANGE_SCRAM_POINT_VISIBILITY,
-} from "./API/socket";
-import { IUser } from "./types/types";
+} from "../API/socket";
+import { IUser } from "../types/types";
 
-function App() {
+function Index() {
   const { initialize, changeScramPointVisibility } = roomSlice.actions;
 
   const dispatch = useAppDispatch();
   socket.on(UPDATE_USERS, (users: IUser[]) => {
-    console.log(users)
     dispatch(initialize(users));
   });
 
@@ -35,4 +34,4 @@ function App() {
   );
 }
 
-export default App;
+export default Index;

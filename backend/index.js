@@ -8,7 +8,8 @@ import {
   UPDATE_USERS,
   JOIN_TO_ROOM,
   SET_SCRAM_POINT,
-  CHANGE_SCRAM_POINT_VISIBILITY, CLEAR_VOTES_VALUE,
+  CHANGE_SCRAM_POINT_VISIBILITY,
+  CLEAR_VOTES_VALUE,
 } from "./actions.js";
 
 const app = express();
@@ -17,18 +18,20 @@ const io = new Server(server);
 const adapter = new JSONFile("db.json");
 const db = new Low(adapter);
 
-app.use(express.static(path.join('../frontend/build')));
+app.use(express.static(path.join("../frontend/build")));
 
-const clearVotesValue = (socket) =>{
-  socket.on(CLEAR_VOTES_VALUE, async ({roomId}) => {
+const clearVotesValue = (socket) => {
+  socket.on(CLEAR_VOTES_VALUE, async ({ roomId }) => {
     if (db.data.rooms[roomId]) {
-      db.data.rooms[roomId].users = db.data.rooms[roomId].users.map((user)=> ({...user, scrum:0}))
-      console.log(db.data.rooms[roomId].users)
+      db.data.rooms[roomId].users = db.data.rooms[roomId].users.map((user) => ({
+        ...user,
+        scrum: 0,
+      }));
       io.to(roomId).emit(UPDATE_USERS, db.data.rooms[`${roomId}`].users);
       await adapter.write(db.data);
     }
   });
-}
+};
 
 const updateUsersList = (socket) => {
   socket.on(UPDATE_USERS, async (roomId) => {
@@ -47,7 +50,6 @@ const updateUsersList = (socket) => {
 
 const joinToRoom = (socket) => {
   socket.on(JOIN_TO_ROOM, async (data) => {
-    console.log(data);
     const { roomId, host } = data;
     socket.join(roomId);
 
@@ -108,8 +110,6 @@ io.on("connection", async (socket) => {
   changeScramPointVisibility(socket);
   clearVotesValue(socket);
 });
-
-
 
 const init = async () => {
   await db.read();

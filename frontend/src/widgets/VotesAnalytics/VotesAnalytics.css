@@ -1,0 +1,15 @@
+.votesAnalytics {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    width: 200px;
+    height: 100px;
+
+    background: var(--main-color);
+    box-shadow: -5px -5px 10px var(--room-shadow-color-lightn),
+    5px 5px 15px var(--room-shadow-color-dark);
+    padding: 10px;
+    border-radius: 10px;
+}

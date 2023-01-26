@@ -21,7 +21,6 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     createRoom(state, action: PayloadAction<IUser>) {
-      console.log(action);
       state.name = action.payload.name;
       state.roomId = action.payload.roomId;
       state.host = action.payload.host;

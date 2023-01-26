@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import "./home.css";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
@@ -25,14 +25,12 @@ function Home() {
   const connectToHostingRoom = () => {
     setActiveConnect(true);
     setActiveCreateRoom(true);
-    const value:number = parseInt(roomId)
-
+    const value: number = parseInt(roomId);
 
     name && roomId && dispatch(connect({ name: name, roomId: value }));
   };
 
   useEffect(() => {
-    console.log({ users });
     if (users.length) console.log("USER IN ROOM");
     if (users.length) navigate("/room");
   }, [users]);
@@ -53,15 +51,14 @@ function Home() {
     }
   };
 
-  const changeName = (e : ChangeEvent<HTMLInputElement>) =>{
-    console.log(name.length)
-    setName(e.target.value.slice(0, 15))
-  }
+  const changeName = (e: ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value.slice(0, 15));
+  };
 
   const onChangeRoomId = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace (/\D/, '')
-    setRoomId(value)
-  }
+    const value = e.target.value.replace(/\D/, "");
+    setRoomId(value);
+  };
   return (
     <div className={"main"}>
       <div className={"room"}>
@@ -69,7 +66,7 @@ function Home() {
           className={inputNameValidation()}
           placeholder={"NAME"}
           value={name}
-          onChange={(e)=>changeName(e)}
+          onChange={(e) => changeName(e)}
           onClick={() => setActiveConnect(false)}
         />
         <button type="submit" onClick={createHostingRoom}>
