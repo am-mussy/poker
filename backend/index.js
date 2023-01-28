@@ -19,9 +19,7 @@ const io = new Server(server);
 const adapter = new JSONFile("db.json");
 const db = new Low(adapter);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+// app.use(express.static(path.join("../frontend/build")));
 
 const clearVotesValue = (socket) => {
   socket.on(CLEAR_VOTES_VALUE, async ({ roomId }) => {
