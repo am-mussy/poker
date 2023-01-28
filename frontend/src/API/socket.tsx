@@ -3,7 +3,6 @@ import { io } from "socket.io-client";
 
 export const socket = io("http://localhost:4000/", {
   transports: ["websocket"],
-  secure: true,
 });
 export const CLEAR_VOTES_VALUE = "CLEAR_VOTES_VALUE";
 export const JOIN_TO_ROOM = "JOIN_TO_ROOM";
