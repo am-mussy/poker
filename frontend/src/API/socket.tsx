@@ -1,7 +1,7 @@
 /* eslint-disable-line */
 import { io } from "socket.io-client";
 
-export const socket = io("https://localhost:4000/", {
+export const socket = io("https://94.228.118.237:4000/", {
   transports: ["websocket"],
 });
 export const CLEAR_VOTES_VALUE = "CLEAR_VOTES_VALUE";
