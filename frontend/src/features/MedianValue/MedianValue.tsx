@@ -20,15 +20,17 @@ function median(values: number[]) {
 }
 
 const MedianValue = ({ usersVotes }: MedianValueProps) => {
-  const medianValue = usersVotes && Math.ceil(median(usersVotes));
-  let result = 0;
-  for (let i = 0; i < fibonacciNumber.length; i++) {
-    if (
-      medianValue >= fibonacciNumber[i] &&
-      medianValue <= fibonacciNumber[i]
-    ) {
-      result = fibonacciNumber[i];
-    }
+  let result;
+  if (!usersVotes.length) {
+    result = 0;
+  } else {
+    const medianValue = usersVotes && Math.ceil(median(usersVotes));
+
+    const abs = Math.abs;
+    const closest = (array: number[], value: number) =>
+      array.reduce((p, c) => (abs(c - value) < abs(p - value) ? c : p));
+
+    result = closest(fibonacciNumber, medianValue);
   }
 
   const isHidden = useAppSelector(

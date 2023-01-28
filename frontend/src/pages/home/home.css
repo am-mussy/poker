@@ -1,17 +1,5 @@
-body {
-    --main-color: #252731;
-    /*room color*/
-    --room-shadow-color-dark: rgba(0, 0, 0, 0.5);
-    --room-shadow-color-lightn: rgba(255, 255, 255, 0.05);
-    /*text color*/
-    --text-color: #626161
-}
 
-
-body {
-    background-color:  var(--main-color);
-}
-.main {
+.root-home {
     margin-top: 100px;
     display: flex;
     justify-content: center;
@@ -21,37 +9,28 @@ body {
 .room {
     display: flex;
     flex-direction: column;
-    height: 200px;
-    width: 200px;
-    padding: 50px;
+    height: 220px;
+    width: 330px;
+    padding: 20px;
     gap: 30px;
     background-color:#262A35;
-    border-radius: 20px;
+    position: relative;
+    border-radius: 10px;
+    background: var(--main-color);
+    box-shadow: 9px 9px 16px var(--room-shadow-color-dark), -9px -9px 16px var(--room-shadow-color-lightn);
 }
 
 .room .connect {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-
-
 }
 
 .room .connect input {
-    width: 100px
-}
-
-.room {
-    position: relative;
-    padding: 40px 40px 60px;
-    border-radius: 10px;
-    background: var(--main-color);
-    width: 240px;
-    box-shadow: 9px 9px 16px var(--room-shadow-color-dark), -9px -9px 16px var(--room-shadow-color-lightn);
+    width: 130px
 }
 
 .room  input {
-
     color: var(--text-color);
     text-align: center;
     background: var(--main-color);
@@ -62,6 +41,7 @@ body {
     font-size: 18px;
     box-shadow: inset -2px -2px 6px var(--room-shadow-color-lightn),
     inset 2px 2px 6px var(--room-shadow-color-dark);
+
 }
 .room  button {
     border: none;
@@ -76,7 +56,6 @@ body {
 .room button:active {
     color: #626161;
     border-radius: 40px;
-
     box-shadow: inset -2px -2px 6px var(--room-shadow-color-lightn),
     inset 2px 2px 6px var(--room-shadow-color-dark);
 }

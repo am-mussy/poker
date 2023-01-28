@@ -60,7 +60,7 @@ function Home() {
     setRoomId(value);
   };
   return (
-    <div className={"main"}>
+    <div className={"root-home"}>
       <div className={"room"}>
         <input
           className={inputNameValidation()}

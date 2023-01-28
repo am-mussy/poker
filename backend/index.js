@@ -1,8 +1,9 @@
 import * as path from "path";
+import { readFileSync } from "fs";
+import { createServer } from "https";
 import express from "express";
 import { Low } from "lowdb";
 import { JSONFile } from "lowdb/node";
-import http from "http";
 import { Server } from "socket.io";
 import {
   UPDATE_USERS,
@@ -13,12 +14,17 @@ import {
 } from "./actions.js";
 
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
+
 const adapter = new JSONFile("db.json");
 const db = new Low(adapter);
 
 app.use(express.static(path.join("../frontend/build")));
+const server = createServer({
+  key: readFileSync("/etc/ssl/planning-time.key"),
+  cert: readFileSync("/etc/ssl/planning-time.crt"),
+});
+
+const io = new Server(server);
 
 const clearVotesValue = (socket) => {
   socket.on(CLEAR_VOTES_VALUE, async ({ roomId }) => {

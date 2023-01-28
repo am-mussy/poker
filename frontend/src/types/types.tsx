@@ -2,7 +2,7 @@ export interface IUser {
   name: string | null;
   host?: boolean;
   roomId: number | null;
-  scrum?: number;
+  scrum?: number | undefined;
   userId?: number | null;
 }
 
