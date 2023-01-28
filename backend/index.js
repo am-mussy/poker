@@ -1,8 +1,8 @@
-import * as path from "path";
 import express from "express";
 import { Low } from "lowdb";
 import { JSONFile } from "lowdb/node";
-import http from "http";
+// import http from "http";
+import https from "https";
 import { Server } from "socket.io";
 import {
   UPDATE_USERS,
@@ -11,14 +11,25 @@ import {
   CHANGE_SCRAM_POINT_VISIBILITY,
   CLEAR_VOTES_VALUE,
 } from "./actions.js";
+import fs from "fs";
 
 const app = express();
-const server = http.createServer(app);
+// const server = http.createServer(app);
+const options = {
+  key: fs.readFileSync("./ssl/key.pem"),
+  cert: fs.readFileSync("./ssl/cert.pem"),
+};
+
+const server = https.createServer(options, app);
+
+app.get("/", function (req, res) {
+  res.writeHead(200);
+  res.end("hello world\n");
+});
+
 const io = new Server(server);
 const adapter = new JSONFile("db.json");
 const db = new Low(adapter);
-
-// app.use(express.static(path.join("../frontend/build")));
 
 const clearVotesValue = (socket) => {
   socket.on(CLEAR_VOTES_VALUE, async ({ roomId }) => {
