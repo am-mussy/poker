@@ -16,8 +16,8 @@ import fs from "fs";
 const app = express();
 // const server = http.createServer(app);
 const options = {
-  key: fs.readFileSync("./ssl/key.pem"),
-  cert: fs.readFileSync("./ssl/cert.pem"),
+  key: fs.readFileSync("./etc/ssl/planning-time.key"),
+  cert: fs.readFileSync("./etc/ssl/planning-time.crt"),
 };
 
 const server = https.createServer(options, app);
