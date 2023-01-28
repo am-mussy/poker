@@ -35,7 +35,7 @@ jobs:
       - name: start
         run: |
           cd /var/www/PokerApp/_work/poker/poker/backend
-          pm2 stop "PokerApp"
+          pm2 kill
           pm2 start index.js --name "PokerApp"
           pm2 save
           sudo systemctl restart nginx
