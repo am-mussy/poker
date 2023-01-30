@@ -1,0 +1,21 @@
+.url-connect-root {
+    display: flex;
+}
+
+.url-connect-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin: 100px auto 0 auto;
+
+
+    justify-content: center;
+
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    padding: 10px;
+    gap: 30px;
+}

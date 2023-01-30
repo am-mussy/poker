@@ -15,7 +15,9 @@ function Home() {
 
   const { createRoom, connect } = userSlice.actions;
   const dispatch = useAppDispatch();
-  const { users } = useAppSelector((state) => state.roomReducer);
+  const { users, roomId: roomIdPath } = useAppSelector(
+    (state) => state.roomReducer
+  );
 
   const createHostingRoom = () => {
     setActiveCreateRoom(true);
@@ -32,7 +34,7 @@ function Home() {
 
   useEffect(() => {
     if (users.length) console.log("USER IN ROOM");
-    if (users.length) navigate("/room");
+    if (users.length) navigate(`/room/${roomIdPath}`);
   }, [users]);
 
   const inputNameValidation = () => {

@@ -1,0 +1,22 @@
+input {
+    color: var(--text-color);
+    text-align: center;
+    background: var(--main-color);
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    padding: 5px 15px;
+    font-size: 18px;
+    box-shadow: inset -2px -2px 6px var(--room-shadow-color-lightn),
+    inset 2px 2px 6px var(--room-shadow-color-dark);
+}
+
+input::placeholder {
+    color: #555;
+    text-align: center;
+}
+
+input:focus::placeholder {
+    color: rgba(85, 85, 85, 15%);
+    text-align: center;
+}

@@ -5,6 +5,7 @@ import {
   JOIN_TO_ROOM,
   SET_SCRAM_POINT,
   socket,
+  RECONNECT,
 } from "../../API/socket";
 import { createUserId } from "../../helpers/random";
 
@@ -14,6 +15,11 @@ const initialState: IUser = {
   scrum: 0,
   host: false,
   userId: null,
+};
+
+type reconnectDate = {
+  roomId: number;
+  userId: number;
 };
 
 export const userSlice = createSlice({
@@ -47,6 +53,14 @@ export const userSlice = createSlice({
 
       socket.emit(JOIN_TO_ROOM, state);
       socket.emit(UPDATE_USERS, state.roomId);
+    },
+
+    reconnect(state, action: PayloadAction<reconnectDate>) {
+      console.log(action.payload.userId, action.payload.roomId);
+      socket.emit(RECONNECT, {
+        userId: action.payload.userId,
+        roomId: action.payload.roomId,
+      });
     },
   },
 });

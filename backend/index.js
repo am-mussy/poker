@@ -10,6 +10,7 @@ import {
   SET_SCRAM_POINT,
   CHANGE_SCRAM_POINT_VISIBILITY,
   CLEAR_VOTES_VALUE,
+  RECONNECT,
 } from "./actions.js";
 
 const app = express();
@@ -22,6 +23,23 @@ const db = new Low(adapter);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
+const reconnect = (socket) => {
+  socket.on(RECONNECT, async ({ roomId, userId }) => {
+    console.log("START");
+    if (db.data.rooms[roomId]) {
+      const findUser = db.data.rooms[roomId].users.find(
+        (user) => user.userId === userId
+      );
+
+      if (findUser) {
+        console.log(findUser);
+        socket.join(roomId);
+        io.to(roomId).emit(RECONNECT, findUser);
+      }
+    }
+  });
+};
 
 const clearVotesValue = (socket) => {
   socket.on(CLEAR_VOTES_VALUE, async ({ roomId }) => {
@@ -112,6 +130,7 @@ io.on("connection", async (socket) => {
   setScramPoint(socket);
   changeScramPointVisibility(socket);
   clearVotesValue(socket);
+  reconnect(socket);
 });
 
 const init = async () => {
