@@ -15,7 +15,7 @@ export const roomSlice = createSlice({
   name: "room",
   initialState,
   reducers: {
-    initialize(state, action: PayloadAction<IUser[]>) {
+    roomUpdate(state, action: PayloadAction<IUser[]>) {
       state.users = action.payload;
       state.roomId =
         action.payload[0].roomId === null ? 0 : action.payload[0].roomId;

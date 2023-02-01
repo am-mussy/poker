@@ -1,13 +1,12 @@
 import { IUser } from "../../types/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  UPDATE_USERS,
-  JOIN_TO_ROOM,
   SET_SCRAM_POINT,
   socket,
   RECONNECT,
+  HOST_ROOM,
+  CONNECT_ROOM,
 } from "../../API/socket";
-import { createUserId } from "../../helpers/random";
 
 const initialState: IUser = {
   name: "",
@@ -17,23 +16,16 @@ const initialState: IUser = {
   userId: null,
 };
 
-type reconnectDate = {
-  roomId: number;
-  userId: number;
-};
-
 export const userSlice = createSlice({
   name: "appUser",
   initialState,
   reducers: {
-    createRoom(state, action: PayloadAction<IUser>) {
+    hostRoom(state, action: PayloadAction<IUser>) {
       state.name = action.payload.name;
       state.roomId = action.payload.roomId;
       state.host = action.payload.host;
-      state.userId = createUserId();
 
-      socket.emit(JOIN_TO_ROOM, state);
-      socket.emit(UPDATE_USERS, state.roomId);
+      socket.emit(HOST_ROOM, state);
     },
 
     setScramPoint(state, action: PayloadAction<number>) {
@@ -49,18 +41,27 @@ export const userSlice = createSlice({
       state.name = action.payload.name;
       state.roomId = action.payload.roomId;
       state.host = false;
-      state.userId = createUserId();
 
-      socket.emit(JOIN_TO_ROOM, state);
-      socket.emit(UPDATE_USERS, state.roomId);
+      socket.emit(CONNECT_ROOM, state);
     },
 
-    reconnect(state, action: PayloadAction<reconnectDate>) {
-      console.log(action.payload.userId, action.payload.roomId);
+    reconnect(state, action: PayloadAction<IUser>) {
       socket.emit(RECONNECT, {
         userId: action.payload.userId,
         roomId: action.payload.roomId,
       });
+    },
+
+    updateUserId(state, action: PayloadAction<number>) {
+      state.userId = action.payload;
+    },
+
+    updateUserInfoFromLocalStorage(state, action: PayloadAction<IUser>) {
+      state.name = action.payload.name;
+      state.roomId = action.payload.roomId;
+      state.userId = action.payload.userId;
+      state.host = action.payload.host;
+      state.scrum = action.payload.scrum;
     },
   },
 });

@@ -5,13 +5,16 @@ import http from "http";
 
 import { Server } from "socket.io";
 import {
-  UPDATE_USERS,
-  JOIN_TO_ROOM,
   SET_SCRAM_POINT,
   CHANGE_SCRAM_POINT_VISIBILITY,
   CLEAR_VOTES_VALUE,
   RECONNECT,
+  HOST_ROOM,
+  CONNECT_ROOM,
+  UPDATE_SCRAM_POINT,
+  UPDATE_USER_ID,
 } from "./actions.js";
+import { generateID } from "./helpers.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -25,17 +28,13 @@ app.get("/", (req, res) => {
 });
 
 const reconnect = (socket) => {
-  socket.on(RECONNECT, async ({ roomId, userId }) => {
-    console.log("START");
+  socket.on(RECONNECT, async ({ roomId }) => {
     if (db.data.rooms[roomId]) {
-      const findUser = db.data.rooms[roomId].users.find(
-        (user) => user.userId === userId
-      );
+      const users = db.data.rooms[roomId].users;
 
-      if (findUser) {
-        console.log(findUser);
+      if (users) {
         socket.join(roomId);
-        io.to(roomId).emit(RECONNECT, findUser);
+        io.to(roomId).emit(RECONNECT, users);
       }
     }
   });
@@ -48,49 +47,9 @@ const clearVotesValue = (socket) => {
         ...user,
         scrum: 0,
       }));
-      io.to(roomId).emit(UPDATE_USERS, db.data.rooms[`${roomId}`].users);
+      socket.join(roomId);
+      io.to(roomId).emit(CLEAR_VOTES_VALUE, db.data.rooms[`${roomId}`].users);
       await adapter.write(db.data);
-    }
-  });
-};
-
-const updateUsersList = (socket) => {
-  socket.on(UPDATE_USERS, async (roomId) => {
-    let roomUsers = [];
-
-    if (db.data.rooms[roomId]) {
-      db.data.rooms[roomId].users.forEach((user) => {
-        if (user.roomId === roomId) roomUsers.push(user);
-      });
-      db.data.rooms[roomId].users = roomUsers;
-
-      io.to(roomId).emit(UPDATE_USERS, db.data.rooms[`${roomId}`].users);
-    }
-  });
-};
-
-const joinToRoom = (socket) => {
-  socket.on(JOIN_TO_ROOM, async (data) => {
-    const { roomId, host } = data;
-    socket.join(roomId);
-
-    if (host) {
-      if (!db.data.rooms[`${roomId}`]) {
-        db.data.rooms[`${roomId}`] = { scramPointIsHidden: true };
-        db.data.rooms[`${roomId}`]["users"] = [];
-      }
-
-      db.data.rooms[`${roomId}`].users.push({ ...data });
-      await adapter.write(db.data);
-    } else {
-      if (
-        Object.keys(db.data.rooms).find((room) => room === roomId.toString())
-      ) {
-        db.data.rooms[`${roomId}`].users.push({ ...data });
-        await adapter.write(db.data);
-      } else {
-        console.log("Room not exist");
-      }
     }
   });
 };
@@ -100,7 +59,6 @@ const setScramPoint = (socket) => {
     db.data.rooms[`${roomId}`].users = db.data.rooms[`${roomId}`].users.map(
       (user) => {
         if (user.userId === userId) {
-          // roomId = user.roomId;
           return { ...user, scrum: scrumPoint };
         } else {
           return user;
@@ -108,8 +66,10 @@ const setScramPoint = (socket) => {
       }
     );
 
+    socket.join(roomId);
+    io.to(roomId).emit(UPDATE_SCRAM_POINT, db.data.rooms[`${roomId}`].users);
+
     await adapter.write(db.data);
-    io.to(roomId).emit(UPDATE_USERS, db.data.rooms[`${roomId}`].users);
   });
 };
 
@@ -119,18 +79,84 @@ const changeScramPointVisibility = (socket) => {
     if (isVisible !== db.data.rooms[`${roomId}`].scramPointIsHidden) {
       db.data.rooms[`${roomId}`].scramPointIsHidden = isVisible;
       await adapter.write(db.data);
+      socket.join(roomId);
       io.to(roomId).emit(CHANGE_SCRAM_POINT_VISIBILITY, isVisible);
     }
   });
 };
 
+const createRoom = async (roomId) => {
+  if (!db.data.rooms[`${roomId}`]) {
+    db.data.rooms[`${roomId}`] = { scramPointIsHidden: true };
+    db.data.rooms[`${roomId}`]["users"] = [];
+    await adapter.write(db.data);
+    console.log(`Комнта:${roomId} создана`);
+  } else {
+    console.error("Комната с таким ID уже есть");
+  }
+};
+
+const createUser = async ({ name, host, roomId, scrum, userId }) => {
+  if (db.data.rooms[`${roomId}`]) {
+    db.data.rooms[`${roomId}`].users.push({
+      name: name,
+      host: host,
+      roomId: roomId,
+      scrum: scrum,
+      userId: userId,
+    });
+    await adapter.write(db.data);
+    console.log(`Пользователь ${name} с id ${userId} создан`);
+  } else {
+    console.error(`Комнта ${roomId} не найдена`);
+  }
+};
+
+const addUserInRoom = async ({ roomId, name, host, scrum, userId }) => {
+  if (db.data.rooms[`${roomId}`]) {
+    db.data.rooms[`${roomId}`].users.push({
+      name: name,
+      host: host,
+      roomId: roomId,
+      scrum: scrum,
+      userId: userId,
+    });
+
+    await adapter.write(db.data);
+  }
+};
+
+const hostRoom = (socket) => {
+  socket.on(HOST_ROOM, async ({ name, host, roomId, scrum }) => {
+    const userId = generateID();
+    await createRoom(roomId);
+    await createUser({ name, host, roomId, scrum, userId });
+    socket.join(roomId);
+    io.to(roomId).emit(HOST_ROOM, db.data.rooms[`${roomId}`]);
+    io.to(roomId).emit(UPDATE_USER_ID, userId);
+  });
+};
+
+const connectToRoom = async (socket) => {
+  socket.on(CONNECT_ROOM, async ({ name, host, roomId, scrum }) => {
+    const userId = generateID();
+    await addUserInRoom({ name, host, roomId, scrum, userId });
+    socket.join(roomId);
+    io.to(roomId).emit(CONNECT_ROOM, db.data.rooms[`${roomId}`].users);
+    io.to(roomId).emit(UPDATE_USER_ID, userId);
+  });
+};
+
 io.on("connection", async (socket) => {
-  joinToRoom(socket);
-  updateUsersList(socket);
-  setScramPoint(socket);
-  changeScramPointVisibility(socket);
-  clearVotesValue(socket);
-  reconnect(socket);
+  // joinToRoom(socket);
+  // updateUsersList(socket);
+
+  await hostRoom(socket);
+  await connectToRoom(socket);
+  await clearVotesValue(socket);
+  await changeScramPointVisibility(socket);
+  await setScramPoint(socket);
+  await reconnect(socket);
 });
 
 const init = async () => {

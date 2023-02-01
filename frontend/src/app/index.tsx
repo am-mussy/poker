@@ -1,58 +1,83 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./index.css";
 import { Route, Routes } from "react-router-dom";
 import Room from "../pages/room/Room";
 import Home from "../pages/home/Home";
 import { roomSlice } from "../store/reducers/RoomSlice";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { useAppDispatch } from "../hooks/hooks";
 import {
-  UPDATE_USERS,
   socket,
   CHANGE_SCRAM_POINT_VISIBILITY,
   RECONNECT,
+  HOST_ROOM,
+  CONNECT_ROOM,
+  UPDATE_SCRAM_POINT,
+  UPDATE_USER_ID,
+  CLEAR_VOTES_VALUE,
 } from "../API/socket";
-import { IUser } from "../types/types";
+import { IRoom, IUser } from "../types/types";
 import Connect from "../pages/connect/Connect";
 import { userSlice } from "../store/reducers/UserSlice";
 
 function Index() {
-  const { initialize, changeScramPointVisibility } = roomSlice.actions;
-
+  const { roomUpdate, changeScramPointVisibility } = roomSlice.actions;
+  const { updateUserId, updateUserInfoFromLocalStorage, reconnect } =
+    userSlice.actions;
   const dispatch = useAppDispatch();
-  socket.on(UPDATE_USERS, (users: IUser[]) => {
-    console.log({ users });
-    dispatch(initialize(users));
+
+  socket.on(HOST_ROOM, (room: IRoom) => {
+    const { users } = room;
+
+    dispatch(roomUpdate(users));
+  });
+
+  socket.on(CONNECT_ROOM, (users: IUser[]) => {
+    dispatch(roomUpdate(users));
+  });
+
+  socket.on(CLEAR_VOTES_VALUE, (users: IUser[]) => {
+    dispatch(roomUpdate(users));
+  });
+
+  socket.on(UPDATE_SCRAM_POINT, (users: IUser[]) => {
+    dispatch(roomUpdate(users));
+  });
+
+  socket.on(RECONNECT, (users: IUser[]) => {
+    dispatch(roomUpdate(users));
+  });
+
+  socket.on(UPDATE_USER_ID, (id: number) => {
+    id && dispatch(updateUserId(id));
   });
 
   socket.on(CHANGE_SCRAM_POINT_VISIBILITY, (isVisible: boolean) => {
     dispatch(changeScramPointVisibility(isVisible));
   });
 
-  const { connect, reconnect } = userSlice.actions;
+  let id;
+  const raw = window.localStorage.getItem("user");
+  const user = raw && (JSON.parse(raw) as IUser);
 
-  useEffect(() => {
-    socket.on(RECONNECT, ({ name, roomId }: IUser) => {
-      name && roomId && dispatch(connect({ name: name, roomId: roomId }));
-    });
-  });
+  if (user && user.userId && user.roomId) {
+    id = user.userId;
+    const { userId, roomId, name } = user;
+    userId && dispatch(updateUserInfoFromLocalStorage({ ...user }));
+    userId &&
+      dispatch(reconnect({ name: name, userId: userId, roomId: roomId }));
+  }
 
-  const { roomId } = useAppSelector((state) => state.userReducer);
-
-  useEffect(() => {
-    const raw = window.localStorage.getItem("user");
-    const user = raw && (JSON.parse(raw) as IUser);
-
-    if (user && user.userId && user.roomId) {
-      dispatch(reconnect({ userId: user.userId, roomId: user.roomId }));
-    }
-  }, []);
+  const isReconnect = !!id;
 
   return (
     <>
       <Routes>
         <Route path="/room" element={<Room />} />
         <Route path="/" element={<Home />} />
-        <Route path="/room/:roomId" element={roomId ? <Room /> : <Connect />} />
+        <Route
+          path="/room/:roomId"
+          element={isReconnect ? <Room /> : <Connect />}
+        />
       </Routes>
     </>
   );

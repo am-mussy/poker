@@ -13,16 +13,11 @@ function Home() {
 
   const navigate = useNavigate();
 
-  const { createRoom, connect } = userSlice.actions;
+  const { hostRoom, connect } = userSlice.actions;
   const dispatch = useAppDispatch();
   const { users, roomId: roomIdPath } = useAppSelector(
     (state) => state.roomReducer
   );
-
-  const createHostingRoom = () => {
-    setActiveCreateRoom(true);
-    name && dispatch(createRoom({ name, host: true, roomId: createRoomId() }));
-  };
 
   const connectToHostingRoom = () => {
     setActiveConnect(true);
@@ -30,6 +25,11 @@ function Home() {
     const value: number = parseInt(roomId);
 
     name && roomId && dispatch(connect({ name: name, roomId: value }));
+  };
+
+  const createHostingRoom = () => {
+    setActiveCreateRoom(true);
+    name && dispatch(hostRoom({ name, host: true, roomId: createRoomId() }));
   };
 
   useEffect(() => {
