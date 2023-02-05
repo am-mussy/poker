@@ -91,6 +91,16 @@ export const userSlice = createSlice({
       state.host = false;
       state.scrum = 0;
     },
+
+    clearUserData(state) {
+      state.name = "";
+      state.roomId = 0;
+      state.userId = null;
+      state.host = false;
+      state.scrum = 0;
+
+      window.localStorage.setItem("user", "");
+    },
   },
 });
 

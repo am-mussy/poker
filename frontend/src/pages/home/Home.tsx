@@ -13,7 +13,7 @@ function Home() {
 
   const navigate = useNavigate();
 
-  const { hostRoom, connect } = userSlice.actions;
+  const { hostRoom, connect, clearUserData } = userSlice.actions;
   const dispatch = useAppDispatch();
 
   const connectToHostingRoom = () => {
@@ -26,6 +26,8 @@ function Home() {
   };
 
   const createHostingRoom = () => {
+    dispatch(clearUserData());
+
     const roomId = createRoomId();
     setActiveCreateRoom(true);
     name && dispatch(hostRoom({ name, host: true, roomId: roomId }));
