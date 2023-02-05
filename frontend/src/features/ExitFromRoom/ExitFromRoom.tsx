@@ -15,7 +15,7 @@ const ExitFromRoom = () => {
   };
   return (
     <div>
-      <NeuButton name={"Exit Room"} onClick={exit} className={""} />
+      <NeuButton name={"ВЫЙТИ"} onClick={exit} className={""} />
     </div>
   );
 };
