@@ -13,7 +13,7 @@ const ClearVotesValue = () => {
       <NeuButton
         className={"show-btn"}
         onClick={clearVotesValue}
-        name={`${"Очистить"}`}
+        name={`Очистить`}
       />
     </div>
   );

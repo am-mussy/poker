@@ -204,6 +204,5 @@ const init = async () => {
 };
 
 server.listen(4000, () => {
-  init();
-  console.log("listening on *:4000");
+  init().then(() => console.log("listening on *:4000"));
 });
