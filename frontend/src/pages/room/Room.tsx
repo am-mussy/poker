@@ -21,11 +21,6 @@ function Room() {
     const raw = window.localStorage.getItem("user");
     const user = raw && (JSON.parse(raw) as IUser);
 
-    // if (parseInt(pathname) !== userData.roomId && userData.roomId !== 0) {
-    //   navigate("/");
-    //   window.localStorage.setItem("user", "");
-    // }
-
     if (user && user.userId && user.roomId) {
       id = user.userId;
       const { userId } = user;

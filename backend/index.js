@@ -156,22 +156,10 @@ const removeUser = async (socket) => {
       };
 
       const users = db.data.rooms[`${roomId}`].users;
-
-      // for (let i = 0; i < users.length; i++) {
-      //   console.log(`index:${i} user: ${JSON.stringify(users[i])}`);
-      //   console.log(users[i].userId, userId);
-      //   console.log(users[i].userId === userId);
-      //
-      //   if (users[i].userId === userId)
-      //     console.log("FIND:", i, "user:", users[i]);
-      // }
-
-      console.log(users);
       const index = users.findIndex(findToRemoveUser);
-      users.splice(index, 1);
-      console.log(users);
-      db.data.rooms[`${roomId}`].users = users;
 
+      users.splice(index, 1);
+      db.data.rooms[`${roomId}`].users = users;
       socket.join(roomId);
       io.to(roomId).emit(REMOVE_USER, users);
 

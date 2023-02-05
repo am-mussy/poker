@@ -8,3 +8,7 @@
 .score-blur {
     filter: blur(100px);
 }
+
+.is-voted {
+    color: #6e9cb9;
+}
