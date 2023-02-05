@@ -14,6 +14,7 @@ import {
   UPDATE_SCRAM_POINT,
   UPDATE_USER_ID,
   CLEAR_VOTES_VALUE,
+  REMOVE_USER,
 } from "../API/socket";
 import { IRoom, IUser } from "../types/types";
 import Connect from "../pages/connect/Connect";
@@ -21,8 +22,7 @@ import { userSlice } from "../store/reducers/UserSlice";
 
 function Index() {
   const { roomUpdate, changeScramPointVisibility } = roomSlice.actions;
-  const { updateUserId, updateUserInfoFromLocalStorage, reconnect } =
-    userSlice.actions;
+  const { updateUserId } = userSlice.actions;
   const dispatch = useAppDispatch();
 
   socket.on(HOST_ROOM, (room: IRoom) => {
@@ -47,37 +47,24 @@ function Index() {
     dispatch(roomUpdate(users));
   });
 
+  socket.on(REMOVE_USER, (users: IUser[]) => {
+    dispatch(roomUpdate(users));
+  });
+
   socket.on(UPDATE_USER_ID, (id: number) => {
-    id && dispatch(updateUserId(id));
+    if (id) dispatch(updateUserId(id));
   });
 
   socket.on(CHANGE_SCRAM_POINT_VISIBILITY, (isVisible: boolean) => {
     dispatch(changeScramPointVisibility(isVisible));
   });
 
-  let id;
-  const raw = window.localStorage.getItem("user");
-  const user = raw && (JSON.parse(raw) as IUser);
-
-  if (user && user.userId && user.roomId) {
-    id = user.userId;
-    const { userId, roomId, name } = user;
-    userId && dispatch(updateUserInfoFromLocalStorage({ ...user }));
-    userId &&
-      dispatch(reconnect({ name: name, userId: userId, roomId: roomId }));
-  }
-
-  const isReconnect = !!id;
-
   return (
     <>
       <Routes>
-        <Route path="/room" element={<Room />} />
         <Route path="/" element={<Home />} />
-        <Route
-          path="/room/:roomId"
-          element={isReconnect ? <Room /> : <Connect />}
-        />
+        <Route path="/room/:roomId" element={<Room />} />
+        <Route path="/room/connect" element={<Connect />} />
       </Routes>
     </>
   );

@@ -5,12 +5,9 @@ export const CHANGE_SCRAM_POINT_VISIBILITY = "CHANGE_SCRAM_POINT_VISIBILITY";
 export const CLEAR_VOTES_VALUE = "CLEAR_VOTES_VALUE";
 export const RECONNECT = "RECONNECT";
 export const UPDATE_USER = "UPDATE_USER";
-
-export const CREATE_ROOM = "UPDATE_USER";
 export const CREATE_USER = "CREATE_USER";
-export const GET_ROOM = "GET_ROOM";
-
 export const HOST_ROOM = "HOST_ROOM";
 export const CONNECT_ROOM = "CONNECT_ROOM";
 export const UPDATE_SCRAM_POINT = "UPDATE_SCRAM_POINT";
 export const UPDATE_USER_ID = "UPDATE_USER_ID";
+export const REMOVE_USER = "REMOVE_USER";

@@ -15,9 +15,14 @@
 }
 
 .right {
+    display: flex;
+    flex-direction: column;
+
     position: fixed;
     height: 100%;
     margin-left: 780px;
+
+    gap: 30px;
 }
 
 .votesAnalytics-wrapper {
@@ -26,4 +31,8 @@
 
 .vote-wrapper {
 
+}
+
+.exit-from-room {
+    margin: 0 auto;
 }

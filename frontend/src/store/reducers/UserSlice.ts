@@ -6,6 +6,7 @@ import {
   RECONNECT,
   HOST_ROOM,
   CONNECT_ROOM,
+  REMOVE_USER,
 } from "../../API/socket";
 
 const initialState: IUser = {
@@ -53,7 +54,20 @@ export const userSlice = createSlice({
     },
 
     updateUserId(state, action: PayloadAction<number>) {
-      state.userId = action.payload;
+      if (!state.userId) {
+        state.userId = action.payload;
+        const raw = window.localStorage.getItem("user");
+        const user = raw && (JSON.parse(raw) as IUser);
+
+        window.localStorage.setItem(
+          "user",
+          JSON.stringify({ ...user, userId: state.userId })
+        );
+      }
+    },
+
+    updateRoomId(state, action: PayloadAction<number>) {
+      state.roomId = action.payload;
     },
 
     updateUserInfoFromLocalStorage(state, action: PayloadAction<IUser>) {
@@ -62,6 +76,20 @@ export const userSlice = createSlice({
       state.userId = action.payload.userId;
       state.host = action.payload.host;
       state.scrum = action.payload.scrum;
+    },
+
+    removeUser(state) {
+      console.log("REMOVE_USER", state.userId);
+      socket.emit(REMOVE_USER, {
+        userId: state.userId,
+        roomId: state.roomId,
+      });
+
+      state.name = "";
+      state.roomId = 0;
+      state.userId = null;
+      state.host = false;
+      state.scrum = 0;
     },
   },
 });

@@ -5,12 +5,13 @@ import http from "http";
 
 import { Server } from "socket.io";
 import {
-  SET_SCRAM_POINT,
   CHANGE_SCRAM_POINT_VISIBILITY,
   CLEAR_VOTES_VALUE,
-  RECONNECT,
-  HOST_ROOM,
   CONNECT_ROOM,
+  HOST_ROOM,
+  RECONNECT,
+  REMOVE_USER,
+  SET_SCRAM_POINT,
   UPDATE_SCRAM_POINT,
   UPDATE_USER_ID,
 } from "./actions.js";
@@ -147,16 +148,52 @@ const connectToRoom = async (socket) => {
   });
 };
 
-io.on("connection", async (socket) => {
-  // joinToRoom(socket);
-  // updateUsersList(socket);
+const removeUser = async (socket) => {
+  socket.on(REMOVE_USER, async ({ roomId, userId }) => {
+    if (db.data.rooms[`${roomId}`]) {
+      const findToRemoveUser = (element) => {
+        return element.userId === userId;
+      };
 
-  await hostRoom(socket);
-  await connectToRoom(socket);
-  await clearVotesValue(socket);
-  await changeScramPointVisibility(socket);
-  await setScramPoint(socket);
-  await reconnect(socket);
+      const users = db.data.rooms[`${roomId}`].users;
+
+      // for (let i = 0; i < users.length; i++) {
+      //   console.log(`index:${i} user: ${JSON.stringify(users[i])}`);
+      //   console.log(users[i].userId, userId);
+      //   console.log(users[i].userId === userId);
+      //
+      //   if (users[i].userId === userId)
+      //     console.log("FIND:", i, "user:", users[i]);
+      // }
+
+      console.log(users);
+      const index = users.findIndex(findToRemoveUser);
+      users.splice(index, 1);
+      console.log(users);
+      db.data.rooms[`${roomId}`].users = users;
+
+      socket.join(roomId);
+      io.to(roomId).emit(REMOVE_USER, users);
+
+      await adapter.write(db.data);
+    } else {
+      console.error(`Комнта ${roomId} не найденаё`);
+    }
+  });
+};
+
+io.on("connection", async (socket) => {
+  try {
+    await hostRoom(socket);
+    await connectToRoom(socket);
+    await clearVotesValue(socket);
+    await changeScramPointVisibility(socket);
+    await setScramPoint(socket);
+    await reconnect(socket);
+    await removeUser(socket);
+  } catch (e) {
+    console.error(e);
+  }
 });
 
 const init = async () => {

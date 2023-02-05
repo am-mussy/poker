@@ -1,7 +1,7 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import "./home.css";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch } from "../../hooks/hooks";
 import { userSlice } from "../../store/reducers/UserSlice";
 import { createRoomId } from "../../helpers/random";
 
@@ -15,9 +15,6 @@ function Home() {
 
   const { hostRoom, connect } = userSlice.actions;
   const dispatch = useAppDispatch();
-  const { users, roomId: roomIdPath } = useAppSelector(
-    (state) => state.roomReducer
-  );
 
   const connectToHostingRoom = () => {
     setActiveConnect(true);
@@ -25,17 +22,16 @@ function Home() {
     const value: number = parseInt(roomId);
 
     name && roomId && dispatch(connect({ name: name, roomId: value }));
+    navigate(`/room/${roomId}`);
   };
 
   const createHostingRoom = () => {
+    const roomId = createRoomId();
     setActiveCreateRoom(true);
-    name && dispatch(hostRoom({ name, host: true, roomId: createRoomId() }));
-  };
+    name && dispatch(hostRoom({ name, host: true, roomId: roomId }));
 
-  useEffect(() => {
-    if (users.length) console.log("USER IN ROOM");
-    if (users.length) navigate(`/room/${roomIdPath}`);
-  }, [users]);
+    navigate(`/room/${roomId}`);
+  };
 
   const inputNameValidation = () => {
     if (activeCreateRoom) {

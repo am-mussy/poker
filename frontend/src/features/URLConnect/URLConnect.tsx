@@ -1,19 +1,22 @@
 import React, { ChangeEvent, useState } from "react";
 import { userSlice } from "../../store/reducers/UserSlice";
-import { useAppDispatch } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import Card from "../../shared/Card/Card";
 import InputText from "../../shared/Input/InputText/InputText";
 import NeuButton from "../../shared/button/NeuButton";
 import "./urlConnect.css";
+import { useNavigate } from "react-router-dom";
 
 const UrlConnect = () => {
   const { connect } = userSlice.actions;
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
+  const navigate = useNavigate();
 
+  const { roomId } = useAppSelector((state) => state.userReducer);
   const buttonHandler = () => {
-    const pathname = window.location.pathname.split("/");
-    dispatch(connect({ name: name, roomId: parseInt(pathname[2]) }));
+    dispatch(connect({ name: name, roomId: roomId }));
+    roomId && navigate(`/room/${roomId}`);
   };
 
   const onChangeRoomId = (e: ChangeEvent<HTMLInputElement>) => {

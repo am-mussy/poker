@@ -3,15 +3,39 @@ import "./room.css";
 import Vote from "../../widgets/Vote/Vote";
 import VotesAnalytics from "../../widgets/VotesAnalytics/VotesAnalytics";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { userSlice } from "../../store/reducers/UserSlice";
+import ExitFromRoom from "../../features/ExitFromRoom/ExitFromRoom";
+import { IUser } from "../../types/types";
 
 function Room() {
   const navigate = useNavigate();
   const userData = useAppSelector((state) => state.userReducer);
-
+  const dispatch = useAppDispatch();
+  const { updateRoomId, updateUserInfoFromLocalStorage, reconnect } =
+    userSlice.actions;
   useEffect(() => {
-    if (!userData.roomId) {
-      navigate("/");
+    let id;
+    const pathname = window.location.pathname.split("/")[2];
+
+    const raw = window.localStorage.getItem("user");
+    const user = raw && (JSON.parse(raw) as IUser);
+
+    // if (parseInt(pathname) !== userData.roomId && userData.roomId !== 0) {
+    //   navigate("/");
+    //   window.localStorage.setItem("user", "");
+    // }
+
+    if (user && user.userId && user.roomId) {
+      id = user.userId;
+      const { userId } = user;
+      userId && dispatch(updateUserInfoFromLocalStorage(user));
+      userId && dispatch(reconnect(user));
+    }
+
+    if (!userData.roomId && !id) {
+      dispatch(updateRoomId(parseInt(pathname)));
+      navigate("/room/connect");
     } else {
       window.localStorage.setItem("user", JSON.stringify(userData));
     }
@@ -26,6 +50,9 @@ function Room() {
           </div>
         </div>
         <div className={"right"}>
+          <div className={"exit-from-room"}>
+            <ExitFromRoom />
+          </div>
           <div className={"votesAnalytics-wrapper"}>
             <VotesAnalytics />
           </div>
