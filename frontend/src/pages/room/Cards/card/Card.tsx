@@ -6,9 +6,10 @@ import NeuButton from "../../../../shared/button/NeuButton";
 
 interface CardProps {
   fibNumber: number;
+  selected: boolean;
 }
 
-const Card: FC<CardProps> = ({ fibNumber }) => {
+const Card: FC<CardProps> = ({ fibNumber, selected }) => {
   const { setScramPoint } = userSlice.actions;
   const dispatch = useAppDispatch();
 
@@ -20,7 +21,9 @@ const Card: FC<CardProps> = ({ fibNumber }) => {
   };
 
   return (
-    <div className={"scrumVote-wrapper"}>
+    <div
+      className={selected ? `selected scrumVote-wrapper` : `scrumVote-wrapper`}
+    >
       <NeuButton
         name={fibNumber}
         onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

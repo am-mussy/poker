@@ -1,7 +1,20 @@
+.card-root {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   justify-content: center;
+}
 .card-root:hover {
    cursor: pointer;
 }
 
 .scrumVote-wrapper {
    margin: 50px 0 30px auto ;
+   border-radius: 30px;
+   border: 2px solid rgba(0,0,0,0%);
+}
+
+.selected {
+   border-radius: 30px;
+   border: 2px solid rgba(140, 156, 238, 0.66);
 }
