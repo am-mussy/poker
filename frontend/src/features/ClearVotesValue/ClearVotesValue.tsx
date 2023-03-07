@@ -2,11 +2,16 @@ import NeuButton from "../../shared/button/NeuButton";
 import React from "react";
 import { roomSlice } from "../../store/reducers/RoomSlice";
 import { useAppDispatch } from "../../hooks/hooks";
+import { userSlice } from "../../store/reducers/UserSlice";
 
 const ClearVotesValue = () => {
   const dispatch = useAppDispatch();
   const { clearVotesValueAction } = roomSlice.actions;
-  const clearVotesValue = () => dispatch(clearVotesValueAction());
+  const { setScramPoint } = userSlice.actions;
+  const clearVotesValue = () => {
+    dispatch(clearVotesValueAction());
+    dispatch(setScramPoint(0));
+  };
 
   return (
     <div>

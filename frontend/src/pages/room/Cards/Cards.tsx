@@ -8,13 +8,15 @@ function Cards() {
   const { scrum } = useAppSelector((state) => state.userReducer);
   return (
     <div className={"cards-root"}>
-      {fibonacciNumber.map((number) => (
-        <Card
-          key={`${number}_key`}
-          fibNumber={number}
-          selected={number === scrum}
-        />
-      ))}
+      {fibonacciNumber.map((number) => {
+        return (
+          <Card
+            key={`${number}_key`}
+            fibNumber={number}
+            selected={number === 0 ? false : number === scrum}
+          />
+        );
+      })}
     </div>
   );
 }
